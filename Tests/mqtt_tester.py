@@ -1,4 +1,3 @@
-import logging
 import os
 import logging.handlers
 import Publish.publisher
