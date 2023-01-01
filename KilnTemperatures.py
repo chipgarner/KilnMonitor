@@ -2,6 +2,8 @@
 # Copyright (c) 2014 Adafruit Industries
 # Author: Tony DiCola
 #
+# Modified January 2023 by Chip Garner
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -21,13 +23,12 @@
 # THE SOFTWARE.
 
 # Can enable debug output by uncommenting:
-#import logging
-#logging.basicConfig(level=logging.DEBUG)
+# import logging
+# logging.basicConfig(level=logging.DEBUG)
 
 import Publish.publisher
 import time
 from Secrets import TEST_SECRET
-
 
 # import Adafruit_GPIO.SPI as SPI
 import Adafruit_MAX31855.MAX31855 as MAX31855
@@ -35,7 +36,7 @@ import Adafruit_MAX31855.MAX31855 as MAX31855
 
 # Define a function to convert celsius to fahrenheit.
 def c_to_f(c):
-        return c * 9.0 / 5.0 + 32.0
+    return c * 9.0 / 5.0 + 32.0
 
 
 # Uncomment one of the blocks of code below to configure your Pi or BBB to use
@@ -43,25 +44,25 @@ def c_to_f(c):
 
 # Raspberry Pi software SPI configuration.
 CLK = 25
-CS  = 24
-DO  = 18
+CS = 24
+DO = 18
 sensor = MAX31855.MAX31855(CLK, CS, DO)
 
 # Raspberry Pi hardware SPI configuration.
-#SPI_PORT   = 0
-#SPI_DEVICE = 0
-#sensor = MAX31855.MAX31855(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
+# SPI_PORT   = 0
+# SPI_DEVICE = 0
+# sensor = MAX31855.MAX31855(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
 
 # BeagleBone Black software SPI configuration.
-#CLK = 'P9_12'
-#CS  = 'P9_15'
-#DO  = 'P9_23'
-#sensor = MAX31855.MAX31855(CLK, CS, DO)
+# CLK = 'P9_12'
+# CS  = 'P9_15'
+# DO  = 'P9_23'
+# sensor = MAX31855.MAX31855(CLK, CS, DO)
 
 # BeagleBone Black hardware SPI configuration.
-#SPI_PORT   = 1
-#SPI_DEVICE = 0
-#sensor = MAX31855.MAX31855(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
+# SPI_PORT   = 1
+# SPI_DEVICE = 0
+# sensor = MAX31855.MAX31855(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
 
 pub = Publish.publisher.Publisher(TEST_SECRET)
 
