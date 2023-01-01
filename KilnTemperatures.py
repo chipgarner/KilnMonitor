@@ -30,14 +30,21 @@ import Publish.publisher
 import time
 from Secrets import TEST_SECRET
 
+import board
+import digitalio
+import adafruit_max31856
+
+spi = board.SPI()
+cs = digitalio.DigitalInOut(board.D5)
+cs.direction = digitalio.Direction.OUTPUT
+thermocouple = adafruit_max31856.MAX31856(spi,cs)
+
 # import Adafruit_GPIO.SPI as SPI
 import Adafruit_MAX31855.MAX31855 as MAX31855
-
 
 # Define a function to convert celsius to fahrenheit.
 def c_to_f(c):
     return c * 9.0 / 5.0 + 32.0
-
 
 # Uncomment one of the blocks of code below to configure your Pi or BBB to use
 # software or hardware SPI.
@@ -71,10 +78,12 @@ print('Press Ctrl-C to quit.')
 while True:
     temp = sensor.readTempC()
     internal = sensor.readInternalC()
-    print('Thermocouple Temperature: {0:0.3F}*C / {1:0.3F}*F'.format(temp, c_to_f(temp)))
-    print('    Internal Temperature: {0:0.3F}*C / {1:0.3F}*F'.format(internal, c_to_f(internal)))
+    t2 = thermocouple.temperature
+    print('           T2: {0:0.3F}*F'.format(c_to_f(t2)))
+    print('           T1: {0:0.3F}*F'.format(c_to_f(temp)))
+    print('T amp1: {0:0.3F}*F'.format(c_to_f(internal)))
 
-    message = {'Kiln T1': c_to_f(temp), 'Amp T1': c_to_f(internal)}
+    message = {'Kiln T1': c_to_f(temp), 'Amp T1': c_to_f(internal), 'T2': c_to_f(t2)}
     time_in_seconds = round(time.time() * 1000)
     time_stamped_message = {"ts": time_in_seconds, "values": message}
     pub.send_message(str(time_stamped_message))
