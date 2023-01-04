@@ -22,9 +22,9 @@ while True:
 	for k, v in sensor1.fault.items():
 		if v:
 			print('Sensor1 fault: ' + str(v))
-	for k, v in sensor2.fault.items():
-		if v:
-			print('Sensor2 fault: ' + str(v))
+	# for k, v in sensor2.fault.items():
+	# 	if v:
+	# 		print('Sensor2 fault: ' + str(v))
 
 	print('Temperature: {0:0.3f}C'.format(temp1))
 	print('Temperature: {0:0.3f}C'.format(temp2))
