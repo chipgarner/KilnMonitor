@@ -34,11 +34,11 @@ def publish_results(temp, t2):
 last_t2 = 0  # Save this and re-use on errors
 
 while True:
-    temp1 = sensor1.temperature
+    temp1 = sensor1.temperature + 11
 
     try:
         temp2 = sensor2.temperature
-        last_t2 = temp2
+        last_t2 = temp2 + 8
     except RuntimeError as ex:
         print('Temp2 31855 crash: ' + str(ex))
         temp2 = last_t2
