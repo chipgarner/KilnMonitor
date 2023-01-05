@@ -38,9 +38,9 @@ while True:
     temp1 = sensor1.temperature + 7
 
     try:
-        temp2 = sensor2.temperature + 15
+        temp2 = sensor2.temperature + 25.1
         last_t2 = temp2
-        temp2NIST = sensor2.temperature_NIST
+        temp2NIST = sensor2.temperature_NIST + 25.4
         last_t2_nist = temp2NIST
     except RuntimeError as ex:
         print('Temp2 31855 crash: ' + str(ex))
