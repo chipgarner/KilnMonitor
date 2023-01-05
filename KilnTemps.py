@@ -9,8 +9,9 @@ import adafruit_max31856
 import adafruit_max31855
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
-print('MAX31865 and MAX31855 two thermocouples')
+logger.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
 
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 cs1 = digitalio.DigitalInOut(board.D5)
