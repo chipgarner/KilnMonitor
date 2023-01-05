@@ -31,17 +31,21 @@ def publish_results(temp, t2):
     pub.send_message(str(time_stamped_message))
 
 
+last_t2 = 0  # Save this and re-use on errors
+
 while True:
     temp1 = sensor1.temperature
 
     try:
         temp2 = sensor2.temperature
+        last_t2 = temp2
     except RuntimeError as ex:
-        print('31855 crash: ' + str(ex))
+        print('Temp2 31855 crash: ' + str(ex))
+        temp2 = last_t2
 
     for k, v in sensor1.fault.items():
         if v:
-            print('Sensor1 fault: ' + str(v))
+            print('Temp1 sensor fault: ' + str(v))
 
     print('Temperature1: {0:0.3f}F'.format(c_to_f(temp1)))
     print('Temperature2: {0:0.3f}F'.format(c_to_f(temp2)))
