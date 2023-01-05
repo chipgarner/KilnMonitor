@@ -1,11 +1,14 @@
 import Publish.publisher
 import time
 from Secrets import TEST_SECRET
+import logging
 import board
 import busio
 import digitalio
 import adafruit_max31856
 import adafruit_max31855
+
+logger = logging.getLogger(__name__)
 
 print('MAX31865 and MAX31855 two thermocouples')
 
