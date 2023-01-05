@@ -32,6 +32,7 @@ def publish_results(temp, t2, t2_NIST):
 
 
 last_t2 = 0  # Save this and re-use on errors
+last_t2_nist = 0
 
 while True:
     temp1 = sensor1.temperature + 7
@@ -40,10 +41,11 @@ while True:
         temp2 = sensor2.temperature + 15
         last_t2 = temp2
         temp2NIST = sensor2.temperature_NIST
+        last_t2_nist = temp2NIST
     except RuntimeError as ex:
         print('Temp2 31855 crash: ' + str(ex))
         temp2 = last_t2
-        temp2NIST = last_t2
+        temp2NIST = last_t2_nist
 
     for k, v in sensor1.fault.items():
         if v:
