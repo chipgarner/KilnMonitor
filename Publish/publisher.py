@@ -44,7 +44,7 @@ class Publisher:
                     cpu_serial = line[10:26]
             f.close()
         except:
-            cpu_serial = "ERROR000000000"
+            cpu_serial = "ERROR000000000"git
 
         self.logger.info('Serial number: ' + cpu_serial)
 
@@ -56,7 +56,7 @@ class Publisher:
 
     def check_connection(self, rc):
         if rc == mqtt.MQTT_ERR_QUEUE_SIZE or rc == mqtt.MQTT_ERR_NO_CONN:
-            internet = publish.check_internet.check_internet_connection()
+            internet = Publish.check_internet.check_internet_connection()
             self.logger.debug('Publish error code, que max or no conn. Internet: ' + str(internet))
             if internet:
                 if self.reconnect_tries < 5:
