@@ -60,7 +60,11 @@ class Publisher:
             self.logger.debug('Publish error code, que max or no conn. Internet: ' + str(internet))
             if internet:
                 if self.reconnect_tries < 5:
-                    self.mqtt_client.reconnect()
+                    try:
+                        self.mqtt_client.reconnect()
+                    except Exception as ex:
+                        self.logger.error('Paho error in reconnect: ' + str(ex))
+                        time.sleep(2)
                     self.reconnect_tries += 1
                 else:  # This isn't working, start over. Broker disconnect?
                     self.mqtt_client.disconnect()
