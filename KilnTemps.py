@@ -48,4 +48,4 @@ while True:
 
     publish_results(temp1, temp2)
 
-    time.sleep(0.1)
+    time.sleep(5)
