@@ -37,8 +37,8 @@ while True:
     temp1 = sensor1.temperature + 11
 
     try:
-        temp2 = sensor2.temperature
-        last_t2 = temp2 + 8
+        temp2 = sensor2.temperature + 8
+        last_t2 = temp2
     except RuntimeError as ex:
         print('Temp2 31855 crash: ' + str(ex))
         temp2 = last_t2
@@ -49,6 +49,7 @@ while True:
 
     print('Temperature1: {0:0.3f}F'.format(c_to_f(temp1)))
     print('Temperature2: {0:0.3f}F'.format(c_to_f(temp2)))
+    print('  ')
 
     publish_results(temp1, temp2)
 
