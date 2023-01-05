@@ -24,8 +24,8 @@ def c_to_f(c):
 pub = Publish.publisher.Publisher(TEST_SECRET)
 
 
-def publish_results(temp, t2):
-    message = {'Kiln T1': c_to_f(temp), 'T2': c_to_f(t2)}
+def publish_results(temp, t2, t2_NIST):
+    message = {'Kiln T1': c_to_f(temp), 'T2': c_to_f(t2), 'T2 NIST': c_to_f(t2_NIST)}
     time_in_seconds = round(time.time() * 1000)
     time_stamped_message = {"ts": time_in_seconds, "values": message}
     pub.send_message(str(time_stamped_message))
@@ -39,9 +39,11 @@ while True:
     try:
         temp2 = sensor2.temperature + 15
         last_t2 = temp2
+        temp2NIST = sensor2.temperature_NIST
     except RuntimeError as ex:
         print('Temp2 31855 crash: ' + str(ex))
         temp2 = last_t2
+        temp2NIST = last_t2
 
     for k, v in sensor1.fault.items():
         if v:
@@ -49,8 +51,9 @@ while True:
 
     print('Temperature1: {0:0.3f}F'.format(c_to_f(temp1)))
     print('Temperature2: {0:0.3f}F'.format(c_to_f(temp2)))
+    print(' T2 NIST: {0:0.3f}F'.format(c_to_f(temp2NIST)))
     print('  ')
 
-    publish_results(temp1, temp2)
+    publish_results(temp1, temp2, temp2NIST)
 
     time.sleep(5)

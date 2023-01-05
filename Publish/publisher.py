@@ -44,7 +44,7 @@ class Publisher:
                     cpu_serial = line[10:26]
             f.close()
         except:
-            cpu_serial = "ERROR000000000"git
+            cpu_serial = "ERROR000000000"
 
         self.logger.info('Serial number: ' + cpu_serial)
 
