@@ -9,7 +9,7 @@ print('MAX31865 and MAX31855 two thermocouples')
 
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 cs1 = digitalio.DigitalInOut(board.D5)
-cs2 = digitalio.DigitalInOut(board.D18)
+cs2 = digitalio.DigitalInOut(board.D6)
 
 sensor1 = adafruit_max31856.MAX31856(spi, cs1)
 sensor2 = adafruit_max31855.MAX31855(spi, cs2)
