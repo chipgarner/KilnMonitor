@@ -8,10 +8,8 @@ import digitalio
 import adafruit_max31856
 import adafruit_max31855
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-logger.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
+logging.basicConfig(level=logging.DEBUG)
+logging.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
 
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 cs1 = digitalio.DigitalInOut(board.D5)
@@ -39,12 +37,12 @@ last_t2 = 0  # Save this and re-use on errors
 last_t2_nist = 0
 
 while True:
-    temp1 = sensor1.temperature + 7
+    temp1 = sensor1.temperature
 
     try:
-        temp2 = sensor2.temperature + 25.1
+        temp2 = sensor2.temperature
         last_t2 = temp2
-        temp2NIST = sensor2.temperature_NIST + 25.4
+        temp2NIST = sensor2.temperature_NIST
         last_t2_nist = temp2NIST
     except RuntimeError as ex:
         print('Temp2 31855 crash: ' + str(ex))
