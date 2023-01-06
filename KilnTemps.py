@@ -26,8 +26,8 @@ def c_to_f(c):
 pub = Publish.publisher.Publisher(TEST_SECRET)
 
 
-def publish_results(temp, t2, t2_NIST):
-    message = {'Kiln T1': c_to_f(temp), 'T2': c_to_f(t2), 'T2 NIST': c_to_f(t2_NIST)}
+def publish_results(temp, t2):
+    message = {'Kiln T1': c_to_f(temp), 'T2': c_to_f(t2)}
     time_in_seconds = round(time.time() * 1000)
     time_stamped_message = {"ts": time_in_seconds, "values": message}
     pub.send_message(str(time_stamped_message))
