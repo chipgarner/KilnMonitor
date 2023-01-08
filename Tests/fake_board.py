@@ -1,0 +1,4 @@
+
+SCLK = SCK = 'GP26'
+MOSI = 'GP27'
+MISO = 'GP28'

@@ -8,7 +8,7 @@ import digitalio
 import adafruit_max31856
 import adafruit_max31855
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 logging.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
 
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
@@ -17,6 +17,7 @@ cs2 = digitalio.DigitalInOut(board.D6)
 
 sensor1 = adafruit_max31856.MAX31856(spi, cs1)
 sensor2 = adafruit_max31855.MAX31855(spi, cs2)
+sensor1.averaging = 16
 
 
 def c_to_f(c):
@@ -37,21 +38,23 @@ last_t2 = 0  # Save this and re-use on errors
 
 while True:
     temp1 = sensor1.temperature
+    temp1_cj = sensor1.reference_temperature
 
     try:
         temp2 = sensor2.temperature
         last_t2 = temp2
     except RuntimeError as ex:
-        print('Temp2 31855 crash: ' + str(ex))
+        logging.error('Temp2 31855 crash: ' + str(ex))
         temp2 = last_t2
 
     for k, v in sensor1.fault.items():
         if v:
-            print('Temp1 sensor fault: ' + str(k))
+            logging.error('Temp1 sensor fault: ' + str(k))
 
-    print('Temperature1: {0:0.3f}F'.format(c_to_f(temp1)))
-    print('Temperature2: {0:0.3f}F'.format(c_to_f(temp2)))
-    print('  ')
+    logging.info('Temperature1: {0:0.3f}F'.format(c_to_f(temp1)))
+    logging.info('T1 cold junction: {0:0.3f}F'.format(c_to_f(temp1_cj)))
+    logging.info('Temperature2: {0:0.3f}F'.format(c_to_f(temp2)))
+    logging.info('  ')
 
     publish_results(temp1, temp2)
 
