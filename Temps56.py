@@ -5,7 +5,7 @@ import logging
 import board
 import busio
 import digitalio
-import adafruit_max31856
+import ada_max31856_modified
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 logging.info('MAX31865 temperatures')
@@ -13,7 +13,7 @@ logging.info('MAX31865 temperatures')
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 cs1 = digitalio.DigitalInOut(board.D5)
 
-sensor1 = adafruit_max31856.MAX31856(spi, cs1)
+sensor1 = ada_max31856_modified.MAX31856(spi, cs1)
 sensor1.averaging = 16
 sensor1.noise_rejection = 60
 
