@@ -28,7 +28,7 @@ pub = Publish.publisher.Publisher(TEST_SECRET)
 
 
 def publish_results(temp, t2):
-    message = {'Kiln T1': c_to_f(temp), 'T2': c_to_f(t2)}
+    message = {'T1 56': c_to_f(temp), 'T2 55': c_to_f(t2)}
     time_in_seconds = round(time.time() * 1000)
     time_stamped_message = {"ts": time_in_seconds, "values": message}
     pub.send_message(str(time_stamped_message))
@@ -43,17 +43,19 @@ while True:
     try:
         temp2 = sensor2.temperature
         last_t2 = temp2
+        t2_cold_cunction = sensor2.reference_temperature
     except RuntimeError as ex:
         logging.error('Temp2 31855 crash: ' + str(ex))
         temp2 = last_t2
 
     for k, v in sensor1.fault.items():
         if v:
-            logging.error('Temp1 sensor fault: ' + str(k))
+            logging.error('Temp1 31856 fault: ' + str(k))
 
-    logging.info('Temperature1: {0:0.3f}F'.format(c_to_f(temp1)))
+    logging.info('T1 56: {0:0.3f}F'.format(c_to_f(temp1)))
     logging.info('T1 cold junction: {0:0.3f}F'.format(c_to_f(temp1_cj)))
-    logging.info('Temperature2: {0:0.3f}F'.format(c_to_f(temp2)))
+    logging.info('T2 55: {0:0.3f}F'.format(c_to_f(temp2)))
+    logging.info('T2 cold junction: {0:0.3f}F'.format(c_to_f(temp2)))
     logging.info('  ')
 
     publish_results(temp1, temp2)
