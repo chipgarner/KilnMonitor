@@ -42,7 +42,7 @@ t2_cold_junction = None
 
 while True:
     try:
-        temp2 = sensor2.temperature
+        temp2 = sensor2.temperature_NIST
         last_t2 = temp2
         t2_cold_junction = sensor2.reference_temperature
     except RuntimeError as ex:
