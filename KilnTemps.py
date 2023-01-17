@@ -24,14 +24,21 @@ def c_to_f(c):
     return c * 9.0 / 5.0 + 32.0
 
 
-pub = Publish.publisher.Publisher(TEST_SECRET)
+publish_me = True
 
 
-def publish_results(temp, t2):
-    message = {'T1 56': c_to_f(temp), 'T2 55': c_to_f(t2)}
-    time_in_seconds = round(time.time() * 1000)
-    time_stamped_message = {"ts": time_in_seconds, "values": message}
-    pub.send_message(str(time_stamped_message))
+if publish_me:
+    pub = Publish.publisher.Publisher(TEST_SECRET)
+
+
+    def publish_results(temp, t2):
+        message = {'T1 56': c_to_f(temp), 'T2 55': c_to_f(t2)}
+        time_in_seconds = round(time.time() * 1000)
+        time_stamped_message = {"ts": time_in_seconds, "values": message}
+        pub.send_message(str(time_stamped_message))
+else:
+    def publish_results(temp, t2):
+        pass
 
 
 last_t2 = 0  # Save this and re-use on errors
