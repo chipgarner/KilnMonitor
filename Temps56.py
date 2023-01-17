@@ -15,6 +15,7 @@ cs1 = digitalio.DigitalInOut(board.D5)
 
 sensor1 = adafruit_max31856.MAX31856(spi, cs1)
 sensor1.averaging = 16
+sensor1.noise_rejection = 60
 
 
 def c_to_f(c):
