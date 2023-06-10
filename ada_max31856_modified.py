@@ -165,7 +165,7 @@ class MAX31856:
         cs: DigitalInOut,  # pylint: disable=invalid-name
         thermocouple_type: int = ThermocoupleType.K,
     ) -> None:
-        self._device = SPIDevice(spi, cs, baudrate=500000, polarity=0, phase=1)
+        self._device = SPIDevice(spi, cs, polarity=0, phase=1)
 
         # assert on any fault
         self._write_u8(_MAX31856_MASK_REG, 0x0)
@@ -379,7 +379,7 @@ class MAX31856:
         tries = 0
         while self.oneshot_pending:
             tries += 1
-            if tries > 2000:
+            if tries > 200:
                 print('One shot went over 200 tries')
                 break
             sleep(0.01)

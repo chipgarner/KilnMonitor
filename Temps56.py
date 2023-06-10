@@ -16,6 +16,8 @@ cs1 = digitalio.DigitalInOut(board.D5)
 sensor1 = ada_max31856_modified.MAX31856(spi, cs1)
 sensor1.averaging = 16
 sensor1.noise_rejection = 60
+logging.info(str(sensor1.averaging))
+logging.info(str(sensor1.noise_rejection))
 
 
 def c_to_f(c):
@@ -42,6 +44,11 @@ else:
 while True:
     temp1 = sensor1.temperature
     temp1_cj = sensor1.reference_temperature
+
+    sensor1.temperature_thresholds(-10.0, -1100.0)
+    thr1, thr2 = sensor1.temperature_thresholds
+    logging.info(str(thr1), str(thr2))
+
 
     for k, v in sensor1.fault.items():
         if v:

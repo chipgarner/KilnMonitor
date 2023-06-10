@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name
 logging.info('Get the temperatures, MAX31855')
 
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
-cs2 = digitalio.DigitalInOut(board.D6)
+cs2 = digitalio.DigitalInOut(board.D5)
 
 sensor2 = adafruit_max31855.MAX31855(spi, cs2)
 
@@ -20,7 +20,7 @@ def c_to_f(c):
     return c * 9.0 / 5.0 + 32.0
 
 
-publish_me = True
+publish_me = False
 
 
 if publish_me:
@@ -33,12 +33,12 @@ if publish_me:
         time_stamped_message = {"ts": time_in_seconds, "values": message}
         pub.send_message(str(time_stamped_message))
 else:
-    def publish_results(temp, t2):
+    def publish_results(t2):
         pass
 
 
 last_t2 = 0  # Save this and re-use on errors
-t2_cold_junction = None
+t2_cold_junction = -99
 
 while True:
     try:
