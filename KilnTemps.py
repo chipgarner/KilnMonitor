@@ -8,7 +8,7 @@ import digitalio
 import adafruit_max31856
 import adafruit_max31855
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 logging.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
 
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
@@ -44,7 +44,9 @@ else:
 last_t2 = 0  # Save this and re-use on errors
 t2_cold_junction = None
 
+print('Before while')
 while True:
+    print('While')
     temp1 = sensor1.temperature
     temp1_cj = sensor1.reference_temperature
 
