@@ -17,7 +17,7 @@ class MAX31856:
         spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
         cs = digitalio.DigitalInOut(board.D6)
 
-        sensor = adafruit_max31856.MAX31856(spi, cs1)
+        sensor = adafruit_max31856.MAX31856(spi, cs)
         sensor.averaging = 16
 
         self.sensor = sensor
@@ -34,12 +34,29 @@ class MAX31856:
         return temp
 
 
-spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
-cs1 = digitalio.DigitalInOut(board.D6)
-cs2 = digitalio.DigitalInOut(board.D5)
+class MAX31855:
+    def __init__(self):
+        spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
+        cs = digitalio.DigitalInOut(board.D5)
 
+        self.last_t = 0
+        self.sensor = adafruit_max31855.MAX31855(spi, cs)
+
+    def get_temperature(self):
+        try:
+            temp = self.sensor.temperature
+            self.last_t = temp
+        except RuntimeError as ex:
+            logging.error('Temp2 31855 crash: ' + str(ex))
+            temp = self.last_t
+
+        return temp
+
+# spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
+# cs2 = digitalio.DigitalInOut(board.D5)
+#
 sensor1 = MAX31856()
-sensor2 = adafruit_max31855.MAX31855(spi, cs2)
+sensor2 = MAX31855()
 
 
 
@@ -71,20 +88,11 @@ print('Before while')
 while True:
     print('While')
     temp1 = sensor1.get_temperature()
-
-    try:
-        temp2 = sensor2.temperature
-        last_t2 = temp2
-        t2_cold_junction = sensor2.reference_temperature
-    except RuntimeError as ex:
-        logging.error('Temp2 31855 crash: ' + str(ex))
-        temp2 = last_t2
+    temp2 = sensor2.get_temperature()
 
 
     logging.info('T1 56: {0:0.3f}F'.format(c_to_f(temp1)))
-    # logging.info('T1 cold junction: {0:0.3f}F'.format(c_to_f(temp1_cj)))
     logging.info('T2 55: {0:0.3f}F'.format(c_to_f(temp2)))
-    # logging.info('T2 cold junction: {0:0.3f}F'.format(c_to_f(t2_cold_junction)))
     logging.info('  ')
 
     publish_results(temp1, temp2)
