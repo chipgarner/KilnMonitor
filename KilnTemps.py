@@ -11,13 +11,36 @@ import adafruit_max31855
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 logging.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
 
-spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
-cs1 = digitalio.DigitalInOut(board.D5)
-cs2 = digitalio.DigitalInOut(board.D6)
 
-sensor1 = adafruit_max31856.MAX31856(spi, cs1)
+class MAX31856:
+    def __init__(self):
+        spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
+        cs = digitalio.DigitalInOut(board.D6)
+
+        sensor = adafruit_max31856.MAX31856(spi, cs1)
+        sensor.averaging = 16
+
+        self.sensor = sensor
+
+    def get_temperature(self):
+        self.sensor.initiate_one_shot_measurement()
+        time.sleep(1)
+        temp = self.sensor.unpack_temperature()
+
+        for k, v in self.sensor.fault.items():
+            if v:
+                logging.error('Temp1 31856 fault: ' + str(k))
+
+        return temp
+
+
+spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
+cs1 = digitalio.DigitalInOut(board.D6)
+cs2 = digitalio.DigitalInOut(board.D5)
+
+sensor1 = MAX31856()
 sensor2 = adafruit_max31855.MAX31855(spi, cs2)
-sensor1.averaging = 16
+
 
 
 def c_to_f(c):
@@ -47,9 +70,7 @@ t2_cold_junction = None
 print('Before while')
 while True:
     print('While')
-    sensor1.initiate_one_shot_measurement()
-    time.sleep(1)
-    temp1 = sensor1.unpack_temperature()
+    temp1 = sensor1.get_temperature()
 
     try:
         temp2 = sensor2.temperature
@@ -59,16 +80,15 @@ while True:
         logging.error('Temp2 31855 crash: ' + str(ex))
         temp2 = last_t2
 
-    for k, v in sensor1.fault.items():
-        if v:
-            logging.error('Temp1 31856 fault: ' + str(k))
 
     logging.info('T1 56: {0:0.3f}F'.format(c_to_f(temp1)))
     # logging.info('T1 cold junction: {0:0.3f}F'.format(c_to_f(temp1_cj)))
     logging.info('T2 55: {0:0.3f}F'.format(c_to_f(temp2)))
-    logging.info('T2 cold junction: {0:0.3f}F'.format(c_to_f(t2_cold_junction)))
+    # logging.info('T2 cold junction: {0:0.3f}F'.format(c_to_f(t2_cold_junction)))
     logging.info('  ')
 
     publish_results(temp1, temp2)
 
     time.sleep(5)
+
+
