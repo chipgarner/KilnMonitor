@@ -47,8 +47,9 @@ t2_cold_junction = None
 print('Before while')
 while True:
     print('While')
-    temp1 = sensor1.temperature
-    temp1_cj = sensor1.reference_temperature
+    sensor1.initiate_one_shot_measurement()
+    time.sleep(1)
+    temp1 = sensor1.unpack_temperature()
 
     try:
         temp2 = sensor2.temperature
@@ -63,7 +64,7 @@ while True:
             logging.error('Temp1 31856 fault: ' + str(k))
 
     logging.info('T1 56: {0:0.3f}F'.format(c_to_f(temp1)))
-    logging.info('T1 cold junction: {0:0.3f}F'.format(c_to_f(temp1_cj)))
+    # logging.info('T1 cold junction: {0:0.3f}F'.format(c_to_f(temp1_cj)))
     logging.info('T2 55: {0:0.3f}F'.format(c_to_f(temp2)))
     logging.info('T2 cold junction: {0:0.3f}F'.format(c_to_f(t2_cold_junction)))
     logging.info('  ')
