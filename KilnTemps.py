@@ -34,7 +34,7 @@ class KilnTemps:
 
 if __name__ == '__main__':
     # sensors = {'Top 55': MAX31855.MAX31855(), 'Bottom 56': MAX31856.MAX31856()}
-    sensors = {'Top 55 NIST': MAX31855.MAX31855(use_nist=True), 'Bottom 56': MAX31856.MAX31856()}
+    sensors = {'Top 55': MAX31855.MAX31855(), 'Top 55 NIST': MAX31855.MAX31855(use_nist=True), 'Bottom 56': MAX31856.MAX31856()}
     # sensors = {'Top 9600': MCP9600.MCP9600(), 'Bottom 56B': MAX31856.MAX31856()}
 
     kiln_temps = KilnTemps(sensors)
