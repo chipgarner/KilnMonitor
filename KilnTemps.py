@@ -33,7 +33,7 @@ class KilnTemps:
 
 if __name__ == '__main__':
     sensors = {'Top 55': MAX31855.MAX31855(), 'Bottom 56': MAX31856.MAX31856()}
-    sensors = [{'Top 9600': MCP9600.MCP9600}, {'Bottom 56B': MAX31856.MAX31856()}]
-cd
+    sensors = {'Top 9600': MCP9600.MCP9600(), 'Bottom 56B': MAX31856.MAX31856()}
+
     kiln_temps = KilnTemps(sensors)
     kiln_temps.loop()
