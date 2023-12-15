@@ -5,7 +5,7 @@ import logging
 import MAX31855
 import MAX31856
 
-logging.basicConfig(level=logging.ERROR, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
+logging.basicConfig(level=logging.WARNING, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 logging.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
 
 sensor1 = MAX31856.MAX31856()
@@ -30,16 +30,14 @@ else:
 last_t2 = 0  # Save this and re-use on errors
 t2_cold_junction = None
 
-print('Before while')
 while True:
-    print('While')
     temp1 = sensor1.get_temperature()
     temp2 = sensor2.get_temperature()
 
 
-    logging.warning('T1 56: {0:0.3f}F'.format(temp1))
-    logging.warning('T2 55: {0:0.3f}F'.format(temp2))
-    logging.warning('  ')
+    logging.info('T1 56: {0:0.3f}F'.format(temp1))
+    logging.info('T2 55: {0:0.3f}F'.format(temp2))
+    logging.info('  ')
 
     publish_results(temp1, temp2)
 
