@@ -2,4 +2,4 @@ paho-mqtt>=1.6.1
 
 adafruit-circuitpython-max31855
 adafruit-circuitpython-max31856
-adafruit-cicdrcuitpython-mcp9600
+adafruit-circuitpython-mcp9600
