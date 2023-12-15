@@ -9,44 +9,31 @@ import MCP9600
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 logging.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
 
-sensor1 = MAX31856.MAX31856()
-sensor2 = MAX31855.MAX31855()
-sensor3 = MCP9600.MCP9600()
 
+class KilnTemps:
+    def __init__(self, sensors):
+        self.sensors = sensors
+        self.pub = Publish.publisher.Publisher(TEST_SECRET)
 
-publish_me = True
-
-if publish_me:
-    pub = Publish.publisher.Publisher(TEST_SECRET)
-
-
-    def publish_results(temp, t2):
-        message = {'T1 56': temp, 'T2 55': t2}
+    def publish_results(self, message):
         time_in_seconds = round(time.time() * 1000)
         time_stamped_message = {"ts": time_in_seconds, "values": message}
-        pub.send_message(str(time_stamped_message))
-else:
-    def publish_results(temp, t2):
-        pass
+        self.pub.send_message(str(time_stamped_message))
+
+    def loop(self):
+        while True:
+            for name, sensor in self.sensors:
+                temp = sensor.get_temperature()
+                message = {name, temp}
+                self.publish_results(message)
+                logging.info(name + ': {0:0.3f}C'.format(temp))
+
+            time.sleep(5)
 
 
-last_t2 = 0  # Save this and re-use on errors
-t2_cold_junction = None
+if __name__ == '__main__':
+    sensors = [{'Top 55': MAX31855.MAX31855()}, {'Bottom 56': MAX31856.MAX31856()}]
+    # sensors = [{'Top 9600': MCP9600.MCP9600}, {'Bottom 56B': MAX31856.MAX31856()}]
 
-while True:
-    temp1 = sensor1.get_temperature()
-    temp2 = sensor2.get_temperature()
-    temp3 = sensor3.get_temperature()
-    
-
-
-    logging.info('T1 56: {0:0.3f}F'.format(temp1))
-    logging.info('T2 55: {0:0.3f}F'.format(temp2))
-    logging.info('9600: {0:0.3f}F'.format(temp3))
-    logging.info('  ')
-
-    publish_results(temp1, temp2)
-
-    time.sleep(5)
-
-
+    kiln_temps = KilnTemps(sensors)
+    kiln_temps.loop()
