@@ -22,7 +22,7 @@ class KilnTemps:
 
     def loop(self):
         while True:
-            for name, sensor in self.sensors:
+            for name, sensor in self.sensors.items():
                 temp = sensor.get_temperature()
                 message = {name, temp}
                 self.publish_results(message)
