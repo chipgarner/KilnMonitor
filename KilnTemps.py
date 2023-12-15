@@ -1,6 +1,6 @@
 import Publish.publisher
 import time
-from Secrets import TEST_SECRET
+from Secrets import KILN
 import logging
 import MAX31855
 import MAX31856
@@ -13,7 +13,7 @@ logging.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
 class KilnTemps:
     def __init__(self, sensors):
         self.sensors = sensors
-        self.pub = Publish.publisher.Publisher(TEST_SECRET)
+        self.pub = Publish.publisher.Publisher(KILN)
 
     def publish_results(self, message):
         time_in_seconds = round(time.time() * 1000)
@@ -22,13 +22,14 @@ class KilnTemps:
 
     def loop(self):
         while True:
+            message = {}
             for name, sensor in self.sensors.items():
                 temp = sensor.get_temperature()
-                message = {name, temp}
+                message.update({name: temp})
                 self.publish_results(message)
                 logging.info(name + ': {0:0.3f}C'.format(temp))
 
-            time.sleep(5)
+            time.sleep(10)
 
 
 if __name__ == '__main__':
