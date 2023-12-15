@@ -22,17 +22,17 @@ class KilnTemps:
 
     def loop(self):
         while True:
-            for sensor in self.sensors:
-                temp = sensor[1].get_temperature()
-                message = {sensor[0], temp}
+            for name, sensor in self.sensors:
+                temp = sensor.get_temperature()
+                message = {name, temp}
                 self.publish_results(message)
-                logging.info(sensor[0] + ': {0:0.3f}C'.format(temp))
+                logging.info(name + ': {0:0.3f}C'.format(temp))
 
             time.sleep(5)
 
 
 if __name__ == '__main__':
-    sensors = [{'Top 55': MAX31855.MAX31855()}, {'Bottom 56': MAX31856.MAX31856()}]
+    sensors = {'Top 55': MAX31855.MAX31855(), 'Bottom 56': MAX31856.MAX31856()}
     # sensors = [{'Top 9600': MCP9600.MCP9600}, {'Bottom 56B': MAX31856.MAX31856()}]
 
     kiln_temps = KilnTemps(sensors)
