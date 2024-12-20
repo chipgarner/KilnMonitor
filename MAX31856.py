@@ -10,7 +10,7 @@ class MAX31856:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-        spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
+        spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO )
         cs = digitalio.DigitalInOut(board.D6)
 
         sensor = adafruit_max31856.MAX31856(spi, cs)

@@ -29,12 +29,12 @@ class KilnTemps:
                 self.publish_results(message)
                 logging.info(name + ': {0:0.3f}C'.format(temp))
 
-            time.sleep(10)
+            time.sleep(5)
 
 
 if __name__ == '__main__':
-    sensors = {'Top 55': MAX31855.MAX31855(), 'Bottom 56': MAX31856.MAX31856()}
-    sensors = {'Top 9600': MCP9600.MCP9600(), 'Bottom 56B': MAX31856.MAX31856()}
+    sensors = {'Top 55 NIST': MAX31855.MAX31855(), 'Bottom 56B': MAX31856.MAX31856()}
+#    sensors = {'Top 9600': MCP9600.MCP9600(), 'Bottom 56B': MAX31856.MAX31856()}
 
     kiln_temps = KilnTemps(sensors)
     kiln_temps.loop()
