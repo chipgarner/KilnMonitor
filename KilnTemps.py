@@ -5,6 +5,7 @@ import logging
 import MAX31855
 import MAX31856
 import MCP9600
+import queue
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 logging.info('Get the temperatures, MAX31865 and MAX31855 two thermocouples')
@@ -14,6 +15,14 @@ class KilnTemps:
     def __init__(self, sensors):
         self.sensors = sensors
         self.pub = Publish.publisher.Publisher(KILN)
+
+        self.loop_time = 5
+        for sensor in sensors:
+            self.fifo = queue.Queue()
+            six_minute_queue = 360 / self.loop_time
+
+            for items in six_minute_queue:
+                self.fifo.put(0.0)
 
     def publish_results(self, message):
         time_in_seconds = round(time.time() * 1000)
@@ -29,7 +38,12 @@ class KilnTemps:
                 self.publish_results(message)
                 logging.info(name + ': {0:0.3f}C'.format(temp))
 
-            time.sleep(5)
+                old_temp = self.fifo.get()
+                self.fifo.put(temp)
+                slope = (temp - old_temp) * 10
+                logging.info('{0:0.3f}C/hr'.format(slope))
+
+            time.sleep(loop_time)
 
 
 if __name__ == '__main__':
