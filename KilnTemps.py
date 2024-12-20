@@ -22,7 +22,7 @@ class KilnTemps:
             six_minute_queue = 360 / self.loop_time
 
             for items in six_minute_queue:
-                self.fifo.put(0.0)
+                self.fifo.put(0)
 
     def publish_results(self, message):
         time_in_seconds = round(time.time() * 1000)
@@ -41,7 +41,7 @@ class KilnTemps:
                 old_temp = self.fifo.get()
                 self.fifo.put(temp)
                 slope = (temp - old_temp) * 10
-                logging.info('{0:0.3f}C/hr'.format(slope))
+                logging.info(slope + 'C/hr')
 
             time.sleep(loop_time)
 
