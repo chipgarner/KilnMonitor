@@ -43,7 +43,7 @@ class KilnTemps:
                 slope = (temp - old_temp) * 10
                 logging.info(str(int(slope)) + 'C/hr')
 
-            time.sleep(loop_time)
+            time.sleep(self.loop_time)
 
 
 if __name__ == '__main__':
