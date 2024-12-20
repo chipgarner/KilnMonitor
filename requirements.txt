@@ -1,6 +1,5 @@
-pyserial~=3.5
-Pillow~=7.0.0
-paho-mqtt~=1.6.1
+paho-mqtt>=1.6.1
 
 adafruit-circuitpython-max31855
 adafruit-circuitpython-max31856
+adafruit-circuitpython-mcp9600
