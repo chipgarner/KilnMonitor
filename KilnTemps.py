@@ -41,7 +41,7 @@ class KilnTemps:
                 old_temp = self.fifo.get()
                 self.fifo.put(temp)
                 slope = (temp - old_temp) * 10
-                logging.info(int(slope) + 'C/hr')
+                logging.info(str(int(slope)) + 'C/hr')
 
             time.sleep(loop_time)
 
