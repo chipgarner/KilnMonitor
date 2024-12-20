@@ -21,7 +21,7 @@ class KilnTemps:
             self.fifo = queue.Queue()
             six_minute_queue = 360 / self.loop_time
 
-            for items in six_minute_queue:
+            for items in range(int(six_minute_queue)):
                 self.fifo.put(0)
 
     def publish_results(self, message):
