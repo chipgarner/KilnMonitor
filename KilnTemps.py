@@ -21,7 +21,7 @@ class KilnTemps:
             self.fifo = queue.Queue()
             six_minute_queue = 360 / self.loop_time # Not accurate
 
-            now = round(time.time())
+            now = round(time.time() - 10) # Don't divide by zero on the first loop
             for items in range(int(six_minute_queue)):
                 self.fifo.put({'temp': 0, 'time': now})
 
