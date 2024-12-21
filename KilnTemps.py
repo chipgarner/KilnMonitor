@@ -47,6 +47,7 @@ class KilnTemps:
                 delta_temp = temp - old_temp_time['temp']
                 slope = delta_temp / delta_time
                 logging.info(str(int(slope)) + 'C/hr')
+                logging.info(str(delta_temp) + '  ' + str(delta_time) + '  ' + str(old_temp_time))
 
             time.sleep(self.loop_time)
 
