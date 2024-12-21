@@ -43,11 +43,11 @@ class KilnTemps:
                 now = round(time.time())
                 temp_time = {'temp': temp, 'time': now}
                 self.fifo.put(temp_time)
-                delta_time = (now - old_temp_time['time']) / 3600.0
-                delta_temp = temp - old_temp_time['temp']
-                slope = delta_temp / delta_time
-                logging.info(str(int(slope)) + 'C/hr')
-                logging.info(str(delta_temp) + '  ' + str(delta_time) + '  ' + str(old_temp_time))
+                if old_temp_time['temp'] > 0: # Don't output bogus slope
+                    delta_time = (now - old_temp_time['time']) / 3600.0
+                    delta_temp = temp - old_temp_time['temp']
+                    slope = delta_temp / delta_time
+                    logging.info(str(int(slope)) + 'C/hr')
 
             time.sleep(self.loop_time)
 
