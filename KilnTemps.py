@@ -44,7 +44,7 @@ class KilnTemps:
                 temp_time = {'temp': temp, 'time': now}
                 self.fifo.put(temp_time)
                 delta_time = now - old_temp_time['time']
-                delta_temp = (temp - old_temp_time['temp']) / 3600
+                delta_temp = (temp - old_temp_time['temp']) / 3600.0
                 slope = delta_temp / delta_time
                 logging.info(str(int(slope)) + 'C/hr')
 
