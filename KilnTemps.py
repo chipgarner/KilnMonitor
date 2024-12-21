@@ -19,14 +19,15 @@ class KilnTemps:
         self.loop_time = 5
         for sensor in sensors:
             self.fifo = queue.Queue()
-            six_minute_queue = 360 / self.loop_time
+            six_minute_queue = 360 / self.loop_time # Not accurate
 
+            now = round(time.time())
             for items in range(int(six_minute_queue)):
-                self.fifo.put(0)
+                self.fifo.put({'temp': 0, 'time': now})
 
     def publish_results(self, message):
-        time_in_seconds = round(time.time() * 1000)
-        time_stamped_message = {"ts": time_in_seconds, "values": message}
+        time_in_ms = round(time.time() * 1000)
+        time_stamped_message = {"ts": time_in_ms, "values": message}
         self.pub.send_message(str(time_stamped_message))
 
     def loop(self):
@@ -38,9 +39,13 @@ class KilnTemps:
                 self.publish_results(message)
                 logging.info(name + ': {0:0.3f}C'.format(temp))
 
-                old_temp = self.fifo.get()
-                self.fifo.put(temp)
-                slope = (temp - old_temp) * 10
+                old_temp_time = self.fifo.get()
+                now = round(time.time())
+                temp_time = {'temp': temp, 'time': now}
+                self.fifo.put(temp_time)
+                delta_time = now - old_temp_time['time']
+                delta_temp = (temp - old_temp_time['temp']) / 3600
+                slope = delta_temp / delta_time
                 logging.info(str(int(slope)) + 'C/hr')
 
             time.sleep(self.loop_time)
